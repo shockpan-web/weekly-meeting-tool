@@ -1,0 +1,54 @@
+[
+  {
+    "week": "2026-W15",
+    "member_id": "alex",
+    "member_name": "Alex",
+    "project_id": "proj_api",
+    "project_name": "Project API: Core Systems",
+    "status": "on_track",
+    "top1": "Review API spec with the backend team",
+    "top2": "Prepare for the security audit",
+    "top3": "",
+    "blocker": "",
+    "submitted_at": "2026-04-08T10:00:00.000Z"
+  },
+  {
+    "week": "2026-W15",
+    "member_id": "bob",
+    "member_name": "Bob",
+    "project_id": "proj_frontend",
+    "project_name": "Project UI: Web Redesign",
+    "status": "at_risk",
+    "top1": "Finish dashboard mockups",
+    "top2": "",
+    "top3": "",
+    "blocker": "Waiting on the final logo assets from the design agency",
+    "submitted_at": "2026-04-08T10:15:00.000Z"
+  },
+  {
+    "week": "2026-W15",
+    "member_id": "carol",
+    "member_name": "Carol",
+    "project_id": "proj_api",
+    "project_name": "Project API: Core Systems",
+    "status": "on_track",
+    "top1": "Implement user authentication endpoints",
+    "top2": "Write unit tests for auth module",
+    "top3": "",
+    "blocker": "",
+    "submitted_at": "2026-04-08T10:30:00.000Z"
+  },
+  {
+    "week": "2026-W15",
+    "member_id": "carol",
+    "member_name": "Carol",
+    "project_id": "proj_marketing",
+    "project_name": "Project PR: Launch Campaign",
+    "status": "no_update",
+    "top1": "",
+    "top2": "",
+    "top3": "",
+    "blocker": "",
+    "submitted_at": "2026-04-08T10:30:00.000Z"
+  }
+]

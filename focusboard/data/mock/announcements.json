@@ -1,0 +1,13 @@
+[
+  {
+    "id": "ann_20260319_001",
+    "created_at": "2026-03-19 10:00",
+    "created_by": "alex",
+    "body": "This week's meeting has been rescheduled to Thursday at 3:00 PM.",
+    "level": "urgent",
+    "target_project": "",
+    "start_date": "2026-03-19",
+    "end_date": "2026-03-25",
+    "active": true
+  }
+]

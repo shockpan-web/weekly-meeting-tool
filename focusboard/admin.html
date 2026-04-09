@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusBoard — Admin</title>
+  <link rel="stylesheet" href="static/css/style.css">
+  <style>
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal__title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .modal__footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .role-select {
+      padding: 3px 6px;
+      font-size: 12px;
+      font-family: var(--font);
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .toggle-active {
+      cursor: pointer;
+      user-select: none;
+      font-size: 16px;
+    }
+    .ms-level-btn.active,
+    .ms-scope-btn.active,
+    .an-level-btn.active,
+    .an-target-btn.active {
+      background: rgba(31, 111, 235, 0.15);
+      border-color: var(--blue-text);
+      color: var(--blue-text);
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="static/js/firebase-config.js"></script>
+</head>
+<body class="page">
+
+  <!-- Header -->
+  <header class="header">
+    <span class="header__logo">📋 FocusBoard — Admin</span>
+    <div class="header__actions">
+      <a id="btn-dashboard" href="dashboard.html" class="btn btn--ghost">← Dashboard</a>
+    </div>
+  </header>
+
+  <main class="page__body container--wide">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="master">Master</button>
+      <button class="tab-btn" data-tab="milestone">Milestones</button>
+      <button class="tab-btn" data-tab="announce">Communications</button>
+      <button class="tab-btn" data-tab="workload">Workload</button>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         Tab: Master
+    ══════════════════════════════════════ -->
+    <div class="tab-panel active" id="tab-master">
+
+      <!-- Export Button -->
+      <div class="flex-between mb-16">
+        <span class="section-title">Master Data</span>
+        <button class="btn btn--default" id="btn-export-json">⬇️ Export JSON Files</button>
+      </div>
+
+      <!-- Project List -->
+      <div class="flex-between mb-8">
+        <span class="section-title">Projects</span>
+        <button class="btn btn--default" id="btn-add-project">+ Add New Project</button>
+      </div>
+      <div class="table-wrap mb-24">
+        <table class="table" id="project-table">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Phase</th>
+              <th>Period</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="project-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Member List -->
+      <div class="flex-between mb-8">
+        <span class="section-title">Members</span>
+        <button class="btn btn--default" id="btn-add-member">+ Add Member</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="member-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Display Name</th>
+              <th>Role</th>
+              <th>Default Project</th>
+              <th>Active</th>
+            </tr>
+          </thead>
+          <tbody id="member-tbody"></tbody>
+        </table>
+      </div>
+
+    </div><!-- /tab-master -->
+
+    <!-- ══════════════════════════════════════
+         Tab: Milestones
+    ══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-milestone">
+
+      <!-- Add Milestone form -->
+      <div class="card mb-24" style="padding:20px;">
+        <div class="section-title mb-16">＋ Add Milestone</div>
+
+        <div class="form-group">
+          <label class="form-label" for="ms-title">Title</label>
+          <input class="form-control" type="text" id="ms-title" placeholder="e.g. Job 1 Complete">
+          <span class="error-msg" id="err-ms-title">Please enter a title</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ms-date">Date</label>
+          <input class="form-control" type="date" id="ms-date">
+          <span class="error-msg" id="err-ms-date">Please select a date</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Level</label>
+          <div class="flex gap-8">
+            <button class="btn btn--default ms-level-btn" data-level="critical" style="flex:1;">🔴 Critical</button>
+            <button class="btn btn--default ms-level-btn" data-level="major"    style="flex:1;">🟡 Major</button>
+            <button class="btn btn--default ms-level-btn" data-level="minor"    style="flex:1;">⚪ Minor</button>
+          </div>
+          <span class="error-msg" id="err-ms-level">Please select a level</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Scope</label>
+          <div class="flex gap-8">
+            <button class="btn btn--default ms-scope-btn active" data-scope="project" style="flex:1;">● Project-specific</button>
+            <button class="btn btn--default ms-scope-btn"        data-scope="team"    style="flex:1;">○ Team-wide</button>
+          </div>
+        </div>
+
+        <div class="form-group" id="ms-project-group">
+          <label class="form-label" for="ms-project">Project</label>
+          <select class="form-control" id="ms-project">
+            <option value="">— Select Project —</option>
+          </select>
+          <span class="error-msg" id="err-ms-project">Please select a project</span>
+        </div>
+
+        <div style="text-align:right;">
+          <button class="btn btn--primary" id="btn-add-milestone">Add Milestone</button>
+        </div>
+      </div>
+
+      <!-- Milestone list -->
+      <span class="section-title">Upcoming Milestones (Next 3 Months)</span>
+      <div class="table-wrap mt-8">
+        <table class="table" id="milestone-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>Project / Scope</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="milestone-tbody"></tbody>
+        </table>
+      </div>
+
+    </div><!-- /tab-milestone -->
+
+    <!-- ══════════════════════════════════════
+         Tab: Communications
+    ══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-announce">
+
+      <div class="flex-between mb-8">
+        <span class="section-title">Team Announcements</span>
+        <button class="btn btn--default" id="btn-add-announce">+ Create Announcement</button>
+      </div>
+
+      <!-- Announcement List -->
+      <div id="announce-list">
+        <!-- Generated by JS -->
+      </div>
+
+      <!-- Creation Form (hidden initially) -->
+      <div id="announce-form-wrap" style="display:none;">
+        <div class="card mt-16" style="padding:20px;">
+          <div class="form-group">
+            <label class="form-label" for="an-body">Message</label>
+            <textarea class="form-control form-control--textarea" id="an-body"
+              placeholder="e.g. This week's meeting has been moved to Thursday 15:00."
+              rows="3"></textarea>
+            <span class="error-msg" id="err-an-body">Please enter the message</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Level</label>
+            <div class="flex gap-8">
+              <button class="btn btn--default an-level-btn" data-level="urgent" style="flex:1;">🔴 Urgent</button>
+              <button class="btn btn--default an-level-btn active" data-level="notice" style="flex:1;">🟡 Notice</button>
+              <button class="btn btn--default an-level-btn" data-level="info"   style="flex:1;">ℹ️ Info</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Target</label>
+            <div class="flex gap-8">
+              <button class="btn btn--default an-target-btn active" data-target="all"     style="flex:1;">● All</button>
+              <button class="btn btn--default an-target-btn"        data-target="project" style="flex:1;">○ Specific Project</button>
+            </div>
+          </div>
+
+          <div class="form-group" id="an-project-group" style="display:none;">
+            <label class="form-label" for="an-project">Project</label>
+            <select class="form-control" id="an-project">
+              <option value="">— Select Project —</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="display:flex; gap:12px;">
+            <div style="flex:1;">
+              <label class="form-label" for="an-start">From</label>
+              <input class="form-control" type="date" id="an-start">
+            </div>
+            <div style="flex:1;">
+              <label class="form-label" for="an-end">Until</label>
+              <input class="form-control" type="date" id="an-end">
+            </div>
+          </div>
+
+          <div class="flex" style="gap:8px; justify-content:flex-end;">
+            <button class="btn btn--ghost" id="btn-announce-cancel">Cancel</button>
+            <button class="btn btn--primary" id="btn-announce-save">Post Announcement</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-announce -->
+
+    <!-- ══════════════════════════════════════
+         Tab: Workload
+    ══════════════════════════════════════ -->
+    <div class="tab-panel" id="tab-workload">
+
+      <!-- C-1: Assign Matrix -->
+      <div class="mb-24">
+        <span class="section-title">Assign Matrix</span>
+        <p class="text-muted mt-4 mb-8" style="font-size:12px;">Click ● to remove assignment, click empty cell to add assignment</p>
+        <div class="table-wrap">
+          <table class="table" id="assign-table">
+            <thead><tr id="assign-head"></tr></thead>
+            <tbody id="assign-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- C-2: Workload Heatmap -->
+      <div class="flex-between mb-8">
+        <span class="section-title">Workload Heatmap (Last 4 Weeks)</span>
+        <div id="workload-summary" class="flex gap-8" style="font-size:12px; color:var(--text-secondary);"></div>
+      </div>
+      <div class="table-wrap mb-0">
+        <table class="table" id="heatmap-table">
+          <thead><tr id="heatmap-head"></tr></thead>
+          <tbody id="heatmap-body"></tbody>
+        </table>
+      </div>
+
+    </div><!-- /tab-workload -->
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       Project Edit Modal
+  ══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-project">
+    <div class="modal">
+      <div class="modal__title" id="modal-project-title">Add Project</div>
+      <input type="hidden" id="modal-project-id">
+
+      <div class="form-group">
+        <label class="form-label" for="mp-name">Project Name</label>
+        <input class="form-control" type="text" id="mp-name" placeholder="e.g. Project Alpha">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="mp-phase">Phase</label>
+        <input class="form-control" type="text" id="mp-phase" placeholder="e.g. In Progress">
+      </div>
+      <div class="form-group" style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label class="form-label" for="mp-start">Start Date</label>
+          <input class="form-control" type="date" id="mp-start">
+        </div>
+        <div style="flex:1;">
+          <label class="form-label" for="mp-end">End Date</label>
+          <input class="form-control" type="date" id="mp-end">
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="modal-project-cancel">Cancel</button>
+        <button class="btn btn--primary" id="modal-project-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       Member Add Modal
+  ══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-member">
+    <div class="modal">
+      <div class="modal__title">Add Member</div>
+
+      <div class="form-group">
+        <label class="form-label" for="mm-id">Member ID <span class="text-muted" style="font-size:11px;">(lowercase letters, numbers, _)</span></label>
+        <input class="form-control" type="text" id="mm-id" placeholder="e.g. member_c">
+        <span class="error-msg" id="err-mm-id">Please enter an ID</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="mm-name">Display Name</label>
+        <input class="form-control" type="text" id="mm-name" placeholder="e.g. Member C">
+        <span class="error-msg" id="err-mm-name">Please enter a display name</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="mm-role">Role</label>
+        <select class="form-control" id="mm-role">
+          <option value="member">member</option>
+          <option value="manager">manager</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="mm-project">Default Project</label>
+        <select class="form-control" id="mm-project">
+          <option value="">— Select —</option>
+        </select>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="modal-member-cancel">Cancel</button>
+        <button class="btn btn--primary" id="modal-member-save">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="static/js/utils.js"></script>
+  <script src="static/js/admin.js"></script>
+</body>
+</html>

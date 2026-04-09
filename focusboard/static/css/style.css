@@ -1,0 +1,899 @@
+/* ============================================================
+   FocusBoard — style.css
+   Dark mode. Minimal tone inspired by Linear / Notion / Vercel.
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. CSS Variables
+   ---------------------------------------------------------- */
+:root {
+  --bg-primary:     #0d1117;
+  --bg-secondary:   #161b22;
+  --bg-tertiary:    #21262d;
+  --border:         #30363d;
+  --text-primary:   #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted:     #484f58;
+
+  --green-bg:       #1a4731;
+  --green-border:   #2ea043;
+  --green-text:     #3fb950;
+
+  --yellow-bg:      #3d2b00;
+  --yellow-border:  #9e6a03;
+  --yellow-text:    #d29922;
+
+  --red-bg:         #3d0000;
+  --red-border:     #f85149;
+  --red-text:       #ff7b72;
+
+  --blue:           #1f6feb;
+  --blue-text:      #58a6ff;
+
+  --radius-sm:      6px;
+  --radius-md:      12px;
+  --font:           system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* ----------------------------------------------------------
+   2. Reset & Base
+   ---------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--blue-text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------
+   3. Layout
+   ---------------------------------------------------------- */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.container--wide {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ----------------------------------------------------------
+   4. Header / Nav
+   ---------------------------------------------------------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header__logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.header__meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.header__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ----------------------------------------------------------
+   5. Buttons
+   ---------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Primary */
+.btn--primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #ffffff;
+}
+
+.btn--primary:hover {
+  background: #1a5fb4;
+  border-color: #1a5fb4;
+}
+
+/* Default (ghost) */
+.btn--default {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.btn--default:hover {
+  background: var(--border);
+}
+
+/* Danger */
+.btn--danger {
+  background: transparent;
+  border-color: var(--red-border);
+  color: var(--red-text);
+}
+
+.btn--danger:hover {
+  background: var(--red-bg);
+}
+
+/* Ghost (text only) */
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-secondary);
+}
+
+.btn--ghost:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+/* Active state (e.g. Focus Mode on) */
+.btn.active {
+  background: var(--yellow-bg);
+  border-color: var(--yellow-border);
+  color: var(--yellow-text);
+}
+
+/* Full-width */
+.btn--full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Disabled */
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Large */
+.btn--lg {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+/* ----------------------------------------------------------
+   6. Status Toggle Buttons
+   ---------------------------------------------------------- */
+.status-toggle {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  flex: 1;
+  min-width: 110px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.status-btn:hover {
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+/* Selected states */
+.status-btn.selected--green,
+.status-btn[data-status="on_track"].selected {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  color: var(--green-text);
+}
+
+.status-btn.selected--yellow,
+.status-btn[data-status="at_risk"].selected {
+  background: var(--yellow-bg);
+  border-color: var(--yellow-border);
+  color: var(--yellow-text);
+}
+
+.status-btn.selected--red,
+.status-btn[data-status="blocked"].selected {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red-text);
+}
+
+/* ----------------------------------------------------------
+   7. Cards
+   ---------------------------------------------------------- */
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  transition: border-color 0.2s ease, opacity 0.4s ease;
+}
+
+.card:hover {
+  border-color: var(--text-muted);
+}
+
+/* Status accent on left edge */
+.card--on-track {
+  border-left: 3px solid var(--green-border);
+}
+
+.card--at-risk {
+  border-left: 3px solid var(--yellow-border);
+}
+
+.card--blocked {
+  border-left: 3px solid var(--red-border);
+}
+
+.card--pending {
+  border-left: 3px solid var(--text-muted);
+  opacity: 0.6;
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card__project {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.card__tops {
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+.card__tops li {
+  font-size: 13px;
+  color: var(--text-primary);
+  padding: 2px 0;
+  padding-left: 14px;
+  position: relative;
+}
+
+.card__tops li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  color: var(--text-muted);
+}
+
+.card__blocker {
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ----------------------------------------------------------
+   8. Badges
+   ---------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.badge--green {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  color: var(--green-text);
+}
+
+.badge--yellow {
+  background: var(--yellow-bg);
+  border-color: var(--yellow-border);
+  color: var(--yellow-text);
+}
+
+.badge--red {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red-text);
+}
+
+.badge--blue {
+  background: rgba(31, 111, 235, 0.15);
+  border-color: var(--blue);
+  color: var(--blue-text);
+}
+
+.badge--gray {
+  background: var(--bg-tertiary);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------
+   9. Form Elements
+   ---------------------------------------------------------- */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s ease;
+  line-height: 1.5;
+}
+
+.form-control:focus {
+  border-color: var(--blue);
+  background: var(--bg-secondary);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control--textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b949e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+/* Top 3 input rows */
+.top-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.top-inputs__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-inputs__num {
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 16px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Char counter */
+.char-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 2px;
+}
+
+.char-count.warn {
+  color: var(--yellow-text);
+}
+
+.char-count.over {
+  color: var(--red-text);
+}
+
+/* ----------------------------------------------------------
+   10. Blocker field (slide-in)
+   ---------------------------------------------------------- */
+.blocker-field {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+
+.blocker-field.visible {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 20px;
+}
+
+/* ----------------------------------------------------------
+   11. Announcement Banner
+   ---------------------------------------------------------- */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.banner--urgent {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red-text);
+}
+
+.banner--notice {
+  background: var(--yellow-bg);
+  border-color: var(--yellow-border);
+  color: var(--yellow-text);
+}
+
+.banner--info {
+  background: rgba(31, 111, 235, 0.1);
+  border-color: var(--blue);
+  color: var(--blue-text);
+}
+
+/* ----------------------------------------------------------
+   12. Error Message
+   ---------------------------------------------------------- */
+.error-msg {
+  font-size: 12px;
+  color: var(--red-text);
+  margin-top: 6px;
+  display: none;
+}
+
+.error-msg.visible {
+  display: block;
+}
+
+/* ----------------------------------------------------------
+   13. Card Grid (Dashboard)
+   ---------------------------------------------------------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ----------------------------------------------------------
+   14. Tabs (Admin)
+   ---------------------------------------------------------- */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  margin-bottom: -1px;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--blue-text);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* ----------------------------------------------------------
+   15. Table
+   ---------------------------------------------------------- */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background: var(--bg-tertiary);
+}
+
+/* ----------------------------------------------------------
+   16. Milestone Timeline
+   ---------------------------------------------------------- */
+.timeline {
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.timeline__track {
+  position: relative;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  margin: 20px 0 8px;
+}
+
+.timeline__today {
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  width: 1px;
+  background: var(--blue-text);
+  opacity: 0.7;
+}
+
+.timeline__dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+  transition: transform 0.15s ease;
+}
+
+.timeline__dot:hover {
+  transform: translate(-50%, -50%) scale(1.4);
+}
+
+.timeline__dot--critical {
+  background: var(--red-text);
+}
+
+.timeline__dot--major {
+  background: var(--yellow-text);
+}
+
+.timeline__dot--minor {
+  background: var(--text-muted);
+}
+
+.timeline__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 10;
+}
+
+.timeline__dot:hover .tooltip {
+  opacity: 1;
+}
+
+/* Milestone list (always-visible below timeline) */
+#milestone-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.milestone-list__empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 4px 0;
+}
+
+.milestone-list__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
+.milestone-list__row--past {
+  opacity: 0.45;
+}
+
+.milestone-list__row--urgent {
+  border-color: var(--red-text);
+  background: rgba(248, 81, 73, 0.06);
+}
+
+.milestone-list__date {
+  width: 36px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.milestone-list__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.milestone-list__title {
+  flex: 1;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.milestone-list__project {
+  color: var(--text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.milestone-list__badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge--past   { background: var(--bg-tertiary); color: var(--text-muted); }
+.badge--urgent { background: rgba(248, 81, 73, 0.2); color: var(--red-text); font-weight: 600; }
+.badge--normal { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+/* ----------------------------------------------------------
+   17. Heatmap (Workload)
+   ---------------------------------------------------------- */
+.heatmap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: grid;
+}
+
+.heatmap-cell {
+  padding: 10px 12px;
+  font-size: 13px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.heatmap-cell--green  { background: var(--green-bg);   color: var(--green-text); }
+.heatmap-cell--yellow { background: var(--yellow-bg);  color: var(--yellow-text); }
+.heatmap-cell--red    { background: var(--red-bg);     color: var(--red-text); }
+.heatmap-cell--empty  { background: var(--bg-tertiary); color: var(--text-muted); }
+
+/* ----------------------------------------------------------
+   18. Page Wrapper
+   ---------------------------------------------------------- */
+.page {
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.page__body {
+  padding: 28px 24px;
+}
+
+/* ----------------------------------------------------------
+   19. Section / Divider
+   ---------------------------------------------------------- */
+.section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ----------------------------------------------------------
+   20. Utility
+   ---------------------------------------------------------- */
+.text-muted    { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-green    { color: var(--green-text); }
+.text-yellow   { color: var(--yellow-text); }
+.text-red      { color: var(--red-text); }
+.text-blue     { color: var(--blue-text); }
+
+.mt-4  { margin-top: 4px; }
+.mt-8  { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+
+.mb-8  { margin-bottom: 8px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+
+.flex         { display: flex; }
+.flex-center  { display: flex; align-items: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.gap-8  { gap: 8px; }
+.gap-12 { gap: 12px; }
+
+/* ----------------------------------------------------------
+   Project Section — No Update Mode
+   ---------------------------------------------------------- */
+.project-section--skipped .status-toggle,
+.project-section--skipped .top-inputs,
+.project-section--skipped .blocker-field .form-label {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.btn--no-update {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 4px 8px;
+  float: right;
+  margin-top: -2px;
+}
+
+.btn--no-update.active {
+  background: var(--bg-tertiary);
+  border-color: var(--border);
+  color: var(--text-muted);
+}

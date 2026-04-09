@@ -1,0 +1,34 @@
+{
+  "members": [
+    {
+      "id": "alex",
+      "display_name": "Alex",
+      "role": "manager",
+      "projects": [
+        "proj_api",
+        "proj_frontend"
+      ],
+      "active": true
+    },
+    {
+      "id": "bob",
+      "display_name": "Bob",
+      "role": "member",
+      "projects": [
+        "proj_frontend",
+        "proj_marketing"
+      ],
+      "active": true
+    },
+    {
+      "id": "carol",
+      "display_name": "Carol",
+      "role": "member",
+      "projects": [
+        "proj_api",
+        "proj_marketing"
+      ],
+      "active": true
+    }
+  ]
+}

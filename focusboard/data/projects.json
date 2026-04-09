@@ -1,0 +1,63 @@
+{
+  "projects": [
+    {
+      "id": "proj_api",
+      "name": "Project API: Core Systems",
+      "phase": "In Progress",
+      "members": [
+        "alex",
+        "carol"
+      ],
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "active": true,
+      "color": "#1f6feb",
+      "milestones": [
+        {
+          "id": "ms_api_001",
+          "title": "v1.0 Release",
+          "date": "2026-05-15",
+          "level": "critical",
+          "scope": "project"
+        }
+      ]
+    },
+    {
+      "id": "proj_frontend",
+      "name": "Project UI: Web Redesign",
+      "phase": "Early Phase",
+      "members": [
+        "alex",
+        "bob"
+      ],
+      "start_date": "2026-03-01",
+      "end_date": "2026-08-31",
+      "active": true,
+      "color": "#2ea043",
+      "milestones": []
+    },
+    {
+      "id": "proj_marketing",
+      "name": "Project PR: Launch Campaign",
+      "phase": "Planning",
+      "members": [
+        "bob",
+        "carol"
+      ],
+      "start_date": "2026-04-01",
+      "end_date": "2026-06-30",
+      "active": true,
+      "color": "#d29922",
+      "milestones": []
+    }
+  ],
+  "team_milestones": [
+    {
+      "id": "ms_team_001",
+      "title": "Company-wide All Hands",
+      "date": "2026-04-20",
+      "level": "major",
+      "scope": "team"
+    }
+  ]
+}
