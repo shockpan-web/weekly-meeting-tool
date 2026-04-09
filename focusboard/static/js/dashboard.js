@@ -209,18 +209,20 @@ function buildCard(member, rows, projects) {
   // Build a section for each project row
   const projectSections = rows.map((row, i) => {
     const rowMeta = getStatusMeta(row.status);
-    const divider = i > 0 ? `<div style="border-top:1px solid var(--border); margin: 8px 0;"></div>` : '';
+    const divider = i > 0 ? `<div class="project-divider" style="border-top:1px solid var(--border); margin: 8px 0;"></div>` : '';
 
     if (row.status === 'no_update') {
       return `
-        ${divider}
-        <div class="card__project" style="display:flex; justify-content:space-between; align-items:center;">
-          <span>${escHtml(row.project_name)}</span>
-          <span class="badge ${rowMeta.badgeClass}" style="font-size:10px;">${rowMeta.emoji} ${rowMeta.label}</span>
+        <div class="project-wrap" data-status="${row.status}">
+          ${divider}
+          <div class="card__project" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>${escHtml(row.project_name)}</span>
+            <span class="badge ${rowMeta.badgeClass}" style="font-size:10px;">${rowMeta.emoji} ${rowMeta.label}</span>
+          </div>
+          <ul class="card__tops">
+            <li style="color:var(--text-muted); font-style:italic;">No update this week</li>
+          </ul>
         </div>
-        <ul class="card__tops">
-          <li style="color:var(--text-muted); font-style:italic;">No update this week</li>
-        </ul>
       `;
     }
 
@@ -231,13 +233,15 @@ function buildCard(member, rows, projects) {
       : '';
 
     return `
-      ${divider}
-      <div class="card__project" style="display:flex; justify-content:space-between; align-items:center;">
-        <span>${escHtml(row.project_name)}</span>
-        <span class="badge ${rowMeta.badgeClass}" style="font-size:10px;">${rowMeta.emoji} ${rowMeta.label}</span>
+      <div class="project-wrap" data-status="${row.status}">
+        ${divider}
+        <div class="card__project" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>${escHtml(row.project_name)}</span>
+          <span class="badge ${rowMeta.badgeClass}" style="font-size:10px;">${rowMeta.emoji} ${rowMeta.label}</span>
+        </div>
+        <ul class="card__tops">${topsHtml}</ul>
+        ${blockerHtml}
       </div>
-      <ul class="card__tops">${topsHtml}</ul>
-      ${blockerHtml}
     `;
   }).join('');
 
@@ -566,16 +570,22 @@ function bindFocusMode() {
   document.getElementById('btn-focus').addEventListener('click', () => {
     focusMode = !focusMode;
 
-    const onTrackCards = document.querySelectorAll('.card[data-status="on_track"]');
+    const hideTargets = document.querySelectorAll(
+      '.card[data-status="on_track"], .card[data-status="no_update"], ' +
+      '.project-wrap[data-status="on_track"], .project-wrap[data-status="no_update"]'
+    );
+    const dividers = document.querySelectorAll('.project-divider');
     const blockerTexts = document.querySelectorAll('.blocker-text');
     const btn          = document.getElementById('btn-focus');
 
     if (focusMode) {
-      onTrackCards.forEach(card => {
-        card.style.transition = 'opacity 0.4s ease';
-        card.style.opacity    = '0';
-        setTimeout(() => { card.style.display = 'none'; }, 400);
+      hideTargets.forEach(el => {
+        el.style.transition = 'opacity 0.4s ease';
+        el.style.opacity    = '0';
+        setTimeout(() => { if (focusMode) el.style.display = 'none'; }, 400);
       });
+      dividers.forEach(el => el.style.display = 'none');
+
       blockerTexts.forEach(el => {
         el.style.color      = 'var(--red-text)';
         el.style.fontWeight = 'bold';
@@ -584,10 +594,12 @@ function bindFocusMode() {
       btn.textContent = '⚡ Exit Focus';
       btn.classList.add('active');
     } else {
-      onTrackCards.forEach(card => {
-        card.style.display = '';
-        requestAnimationFrame(() => { card.style.opacity = '1'; });
+      hideTargets.forEach(el => {
+        el.style.display = '';
+        requestAnimationFrame(() => { el.style.opacity = '1'; });
       });
+      dividers.forEach(el => el.style.display = '');
+
       blockerTexts.forEach(el => {
         el.style.color      = '';
         el.style.fontWeight = '';
